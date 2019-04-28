@@ -9,6 +9,8 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using NTAP.WebUI.Models;
+using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace NTAP.WebUI.Controllers
 {
@@ -17,6 +19,7 @@ namespace NTAP.WebUI.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private ApplicationDbContext _db;
 
         public AccountController()
         {
@@ -142,16 +145,87 @@ namespace NTAP.WebUI.Controllers
             return View();
         }
 
+        public FileContentResult GetPhoto(int id)
+        {
+            User user = UserManager.FindById(5);
+            return File(user.Photo, user.MimeType);
+        }
+        [HttpPost]
+        public ActionResult EditProfile(EditProfileViewModel model, HttpPostedFileBase filePhoto = null)
+        {
+            try
+            {
+                int iUserID = User.Identity.GetUserId<int>();
+                User user = UserManager.FindById(iUserID);
+
+                if (ModelState.IsValid)
+                {
+                    user.UpdateBy = iUserID;
+                    user.UpdateTime = DateTime.Now;
+                    user.FullName = model.FullName;
+                    user.UserName = model.Username;
+                    user.Email = model.Email;
+
+                    if (filePhoto != null)
+                    {
+                        user.Photo = new byte[filePhoto.ContentLength];
+                        user.MimeType = filePhoto.ContentType;
+                        filePhoto.InputStream.Read(user.Photo, 0, filePhoto.ContentLength);
+                    }
+                    else
+                    {
+                        user.Photo = null;
+                        user.MimeType = null;
+                    }
+
+                    var result = UserManager.Update(user);
+                    if (result.Succeeded)
+                    {
+                        return RedirectToAction("Index", "Home");
+                    }
+                    AddErrors(result);
+                }
+                if (user.Photo != null)
+                    model.PhotoBase64 = String.Format("data:{0};base64,{1}", user.MimeType, Convert.ToBase64String(user.Photo));
+                else
+                    model.PhotoBase64 = "~/Images/app-no-image.png";
+
+                return View(model);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public ViewResult EditProfile()
+        {
+            int iUserID = User.Identity.GetUserId<int>();
+            User user = UserManager.FindById(iUserID);
+            EditProfileViewModel model = new EditProfileViewModel
+            {
+                FullName = user.FullName,
+                Username = user.UserName,
+                Email = user.Email
+            };
+
+            if (user.Photo != null)
+                model.PhotoBase64 = String.Format("data:{0};base64,{1}", user.MimeType, Convert.ToBase64String(user.Photo));
+            else
+                model.PhotoBase64 = Url.Content("~/Images/app-no-image.png");
+
+            return View(model);
+        }
+
         //
         // POST: /Account/Register
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Register(RegisterViewModel model)
+        public async Task<ActionResult> Register(RegisterViewModel model, HttpPostedFileBase filePhoto = null)
         {
             if (ModelState.IsValid)
             {
-                //var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
                 User user = new User
                 {
                     UserName = model.Username,
@@ -161,11 +235,34 @@ namespace NTAP.WebUI.Controllers
                     CreateTime = DateTime.Now,
                     IsDeleted = false
                 };
+
+                if (filePhoto != null)
+                {
+                    user.Photo = new byte[filePhoto.ContentLength];
+                    user.MimeType = filePhoto.ContentType;
+                    filePhoto.InputStream.Read(user.Photo, 0, filePhoto.ContentLength);
+                }
+
+                //Approval approval = new Approval
+                //{
+                //    CreateBy = 0,
+                //    CreateTime = DateTime.Now,
+                //    ApprovalStatusID = 1,
+                //    ObjectType = "User",
+                //    ActionType = "Register",
+                //    Data = JsonConvert.SerializeObject(user)
+                //};
+
+                //_db = new ApplicationDbContext();
+                //_db.Approvals.Add(approval);
+                //_db.SaveChanges();
+                //return RedirectToAction("Index", "Home");
+
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
+                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
@@ -489,6 +586,25 @@ namespace NTAP.WebUI.Controllers
                 context.HttpContext.GetOwinContext().Authentication.Challenge(properties, LoginProvider);
             }
         }
+
+        public ViewResult Approval()
+        {
+            _db = new ApplicationDbContext();
+            IEnumerable<ApprovalListViewModel> model = from approval in _db.Approvals
+                                                       select new ApprovalListViewModel
+                                                       {
+                                                           ApprovalID = approval.ApprovalID,
+                                                           ApprovalStatus = approval.ApprovalStatus,
+                                                           Data = approval.Data,
+                                                           CreateBy = approval.CreateBy,
+                                                           CreateTime = approval.CreateTime,
+                                                           ApprovalBy = approval.ApprovalBy,
+                                                           ApprovalTime = approval.ApprovalTime
+                                                       };
+
+            return View(model.ToList());
+        }
+
         #endregion
     }
 }

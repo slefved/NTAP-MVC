@@ -180,6 +180,18 @@
     <Compile Include="Migrations\201904120607590_ApplicationModels.Designer.cs">
       <DependentUpon>201904120607590_ApplicationModels.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201904281120382_AddUserPropertiesForPhotoUpload.cs" />
+    <Compile Include="Migrations\201904281120382_AddUserPropertiesForPhotoUpload.Designer.cs">
+      <DependentUpon>201904281120382_AddUserPropertiesForPhotoUpload.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904281447046_AddApproval.cs" />
+    <Compile Include="Migrations\201904281447046_AddApproval.Designer.cs">
+      <DependentUpon>201904281447046_AddApproval.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904281452540_ChangeApprovalPropertiesToRequired.cs" />
+    <Compile Include="Migrations\201904281452540_ChangeApprovalPropertiesToRequired.Designer.cs">
+      <DependentUpon>201904281452540_ChangeApprovalPropertiesToRequired.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -284,6 +296,8 @@
     <Content Include="Scripts\popper.js.map" />
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
+    <Content Include="Views\Account\EditProfile.cshtml" />
+    <Content Include="Views\Account\Approval.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -296,6 +310,15 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201904120607590_ApplicationModels.resx">
       <DependentUpon>201904120607590_ApplicationModels.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904281120382_AddUserPropertiesForPhotoUpload.resx">
+      <DependentUpon>201904281120382_AddUserPropertiesForPhotoUpload.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904281447046_AddApproval.resx">
+      <DependentUpon>201904281447046_AddApproval.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904281452540_ChangeApprovalPropertiesToRequired.resx">
+      <DependentUpon>201904281452540_ChangeApprovalPropertiesToRequired.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

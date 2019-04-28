@@ -13,6 +13,7 @@ namespace NTAP.WebUI.Models
     public class ApplicationDbContext : IdentityDbContext<User, Role, int, UserLogin, UserRole, UserClaim>
     {
         public ApplicationDbContext() : base("NTAP") { }
+        public DbSet<Approval> Approvals { get; set; }
         public static ApplicationDbContext Create()
         {
             return new ApplicationDbContext();
@@ -58,6 +59,9 @@ namespace NTAP.WebUI.Models
         public DateTime CreateTime { get; set; }
         public int? UpdateBy { get; set; }
         public DateTime? UpdateTime { get; set; }
+        public byte[] Photo { get; set; }
+        [StringLength(50)]
+        public string MimeType { get; set; }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(ApplicationUserManager manager)
         {
@@ -77,5 +81,34 @@ namespace NTAP.WebUI.Models
     public class RoleStore : RoleStore<Role, int, UserRole>
     {
         public RoleStore(ApplicationDbContext context) : base(context) { }
+    }
+
+    [Table("Approval")]
+    public class Approval
+    {
+        public int ApprovalID { get; set; }
+        public byte ApprovalStatusID { get; set; }
+        [Required, StringLength(50)]
+        public string ObjectType { get; set; }
+        [Required, StringLength(50)]
+        public string ActionType { get; set; }
+        [Required]
+        public string Data { get; set; }
+        public string PreviousData { get; set; }
+        public int CreateBy { get; set; }
+        public DateTime CreateTime { get; set; }
+        public int? ApprovalBy { get; set; }
+        public DateTime? ApprovalTime { get; set; }
+
+        public ApprovalStatus ApprovalStatus { get; set; }
+    }
+    [Table("ApprovalStatus")]
+    public class ApprovalStatus
+    {
+        public byte ApprovalStatusID { get; set; }
+        [StringLength(50)]
+        public string Name { get; set; }
+        [StringLength(255)]
+        public string Description { get; set; }
     }
 }

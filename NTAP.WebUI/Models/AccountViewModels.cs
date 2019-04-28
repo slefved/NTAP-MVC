@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System;
 
 namespace NTAP.WebUI.Models
 {
@@ -82,6 +83,21 @@ namespace NTAP.WebUI.Models
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+
+        public string PhotoBase64 { get; set; }
+    }
+
+    public class EditProfileViewModel
+    {
+        [Required]
+        [Display(Name = "Full Name")]
+        public string FullName { get; set; }
+        [Required]
+        public string Username { get; set; }
+        [Required]
+        [EmailAddress]
+        public string Email { get; set; }
+        public string PhotoBase64 { get; set; }
     }
 
     public class ResetPasswordViewModel
@@ -111,5 +127,18 @@ namespace NTAP.WebUI.Models
         [EmailAddress]
         [Display(Name = "Email")]
         public string Email { get; set; }
+    }
+    public class ApprovalListViewModel
+    {
+        public int ApprovalID { get; set; }
+        public string ObjectType { get; set; }
+        public string ActionType { get; set; }
+        public string Data { get; set; }
+        public int CreateBy { get; set; }
+        public DateTime CreateTime { get; set; }
+        public int? ApprovalBy { get; set; }
+        public DateTime? ApprovalTime { get; set; }
+
+        public ApprovalStatus ApprovalStatus { get; set; }
     }
 }

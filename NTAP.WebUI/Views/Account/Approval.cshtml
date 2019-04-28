@@ -1,0 +1,39 @@
+﻿@model List<NTAP.WebUI.Models.ApprovalListViewModel>
+@using NTAP.WebUI.Helper
+
+@{
+    ViewBag.Title = "Approval";
+}
+
+<div class="row mt-5">
+    <div class="col">
+        <h5>Approval List</h5>
+        <table class="table">
+            <thead class="table-info">
+                <tr>
+                    <th>No</th>
+                    <th>Action</th>
+                    <th>Create Time</th>
+                    <th>Status</th>
+                    <th>Full Name</th>
+                    <th>Username</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < Model.Count; i++)
+                {
+                    <tr>
+                        <td>@(i + 1)</td>
+                        <td>
+
+                        </td>
+                        <td>@Model[i].CreateTime.ToString("dd MMM yyyy HH:mm:ss")</td>
+                        <td>@Model[i].ApprovalStatus.Name</td>
+                        <td>@WebHelper.GetApprovalFullName(Model[i].Data)</td>
+                        <td>@WebHelper.GetApprovalUsername(Model[i].Data)</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

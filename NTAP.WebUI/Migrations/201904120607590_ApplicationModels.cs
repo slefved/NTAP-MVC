@@ -12,7 +12,7 @@ namespace NTAP.WebUI.Migrations
                 c => new
                     {
                         RoleID = c.Int(nullable: false, identity: true),
-                        Name = c.String(nullable: false, maxLength: 256),
+                        Name = c.String(nullable: false, maxLength: 255),
                         Description = c.String(nullable: false, maxLength: 255),
                         IsDeleted = c.Boolean(nullable: false),
                         CreateBy = c.Int(nullable: false),
@@ -41,9 +41,9 @@ namespace NTAP.WebUI.Migrations
                 c => new
                     {
                         UserID = c.Int(nullable: false, identity: true),
-                        UserName = c.String(nullable: false, maxLength: 256),
+                        UserName = c.String(nullable: false, maxLength: 255),
                         FullName = c.String(nullable: false, maxLength: 50),
-                        Email = c.String(maxLength: 256),
+                        Email = c.String(maxLength: 255),
                         IsDeleted = c.Boolean(nullable: false),
                         CreateBy = c.Int(nullable: false),
                         CreateTime = c.DateTime(nullable: false),

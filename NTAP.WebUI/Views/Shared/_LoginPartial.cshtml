@@ -4,7 +4,7 @@
     @if (Request.IsAuthenticated)
     {
         <li class="navbar-item">
-            @Html.ActionLink(User.Identity.GetUserName(), "Index", "Manage", null, new { title = "Manage", @class = "nav-link" })
+            @Html.ActionLink("Hello, " + User.Identity.GetUserName() + "!", "Index", "Manage", null, new { title = "Manage", @class = "nav-link" })
         </li>
         <li class="navbar-item">
             @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))

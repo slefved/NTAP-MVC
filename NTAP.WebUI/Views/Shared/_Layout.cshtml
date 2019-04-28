@@ -10,9 +10,9 @@
 
 </head>
 <body>
-    <nav class="navbar sticky-top navbar-expand-md navbar-dark bg-dark justify-content-center">
+    <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark justify-content-center">
         <a href="@Url.Action("Index", "Home")" class="navbar-brand d-flex w-50 mr-auto">
-            <img src="~/Images/app-logo.png" height="30" alt="" class="d-inline-block align-top">
+            <img src="~/Images/app-logo.png" height="25" alt="" class="d-inline-block align-top">
             &nbsp; NTAP!
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarMenu" aria-controls="navbarMenu" aria-expanded="false" aria-label="Toggle navigation">
@@ -35,9 +35,17 @@
                     <li class="navbar-item">
                         <a href="#" class="nav-link">Reports</a>
                     </li>
-                    <li class="navbar-item">
-                        <a href="#" class="nav-link">Administration</a>
-                    </li>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <li class="navbar-item dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" id="dropdownAdministration" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Administration</a>
+                            <div class="dropdown-menu" aria-labelledby="dropdownAdministration">
+                                <a class="dropdown-item" href="#">User</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="@Url.Action("Approval", "Account")">Approval</a>
+                            </div>
+                        </li>
+                    }
                 </ul>
             }
             @Html.Partial("_LoginPartial")
@@ -48,7 +56,7 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+            <p>&copy; @DateTime.Now.Year - mhadi</p>
         </footer>
     </div>
 
