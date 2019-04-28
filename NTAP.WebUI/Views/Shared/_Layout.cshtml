@@ -1,35 +1,50 @@
 ﻿<!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="utf-8" />
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>@ViewBag.Title - NTAP</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 
 </head>
 <body>
-    <div class="navbar navbar-default navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+    <nav class="navbar sticky-top navbar-expand-md navbar-dark bg-dark justify-content-center">
+        <a href="@Url.Action("Index", "Home")" class="navbar-brand d-flex w-50 mr-auto">
+            <img src="~/Images/app-logo.png" height="30" alt="" class="d-inline-block align-top">
+            &nbsp; NTAP!
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarMenu" aria-controls="navbarMenu" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div id="navbarMenu" class="collapse navbar-collapse w-100">
+            @if (User.Identity.IsAuthenticated)
+            {
+                <ul class="navbar-nav w-100 justify-content-md-center">
+                    <li class="navbar-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" id="questionsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Questions</a>
+                        <div class="dropdown-menu" aria-labelledby="questionsDropdown">
+                            <a class="dropdown-item" href="#">Concern</a>
+                            <a class="dropdown-item" href="#">Agenda</a>
+                            <a class="dropdown-item" href="#">Polling</a>
+                            <a class="dropdown-item" href="#">Quizz</a>
+                            <a class="dropdown-item" href="#">Puzzle</a>
+                        </div>
+                    </li>
+                    <li class="navbar-item">
+                        <a href="#" class="nav-link">Reports</a>
+                    </li>
+                    <li class="navbar-item">
+                        <a href="#" class="nav-link">Administration</a>
+                    </li>
                 </ul>
-                @Html.Partial("_LoginPartial")
-            </div>
+            }
+            @Html.Partial("_LoginPartial")
         </div>
-    </div>
-    <div class="container body-content">
+    </nav>
+
+    <div class="container">
         @RenderBody()
         <hr />
         <footer>
@@ -38,6 +53,7 @@
     </div>
 
     @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/popper")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
 </body>
